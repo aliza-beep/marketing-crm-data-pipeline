@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import sys
+from datetime import date, timedelta
 from pathlib import Path
+
 
 import pandas as pd
 import plotly.express as px
@@ -13,18 +15,32 @@ if str(ROOT / "src") not in sys.path: sys.path.insert(0, str(ROOT / "src"))
 from marketing_pipeline.config import settings
 from marketing_pipeline.database import Database
 from marketing_pipeline.export import FACT_QUERY
+from marketing_pipeline.pipeline import run_pipeline
 
 st.set_page_config(page_title="ScalingCraft Marketing Pipeline", layout="wide")
 st.title("Marketing + CRM Pipeline Monitor")
 st.warning("PORTFOLIO DEMO — all displayed marketing and CRM records are simulated.")
 
 db = Database(settings)
+
 try:
-    db.initialize(); rows = db.query(FACT_QUERY)
-except Exception as exc:  # noqa: BLE001 - dashboard must show a friendly DB/config error
-    st.error(f"Database unavailable: {type(exc).__name__}. Run the ETL first."); st.stop()
-if not rows:
-    st.info("No data yet. Run: python -m marketing_pipeline.pipeline --days 30"); st.stop()
+    db.initialize()
+    rows = db.query(FACT_QUERY)
+
+    # Automatically prepare simulated portfolio data on Streamlit Cloud.
+    if not rows:
+        with st.spinner("Preparing simulated marketing and CRM data..."):
+            end_date = date.today()
+            start_date = end_date - timedelta(days=29)
+            run_pipeline(start_date, end_date)
+            rows = db.query(FACT_QUERY)
+
+except Exception as exc:
+    st.error(
+        f"The demonstration data could not be prepared: "
+        f"{type(exc).__name__}: {exc}"
+    )
+    st.stop()
 
 df = pd.DataFrame(rows); df["event_date"] = pd.to_datetime(df["event_date"])
 source = st.sidebar.multiselect("Source", sorted(df.source.unique()), default=sorted(df.source.unique()))
