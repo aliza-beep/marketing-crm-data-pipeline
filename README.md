@@ -1,6 +1,6 @@
 # Marketing + CRM Data Pipeline Portfolio
 
-> **Honest scope:** this is a local, AI-assisted portfolio MVP built for a ScalingCraft Solutions Data Engineer application. Google Ads, Meta Ads, GA4 and CRM data are **deterministic simulations**. No production vendor API was called, no real customer data is present, and no cloud deployment is claimed.
+> **Honest scope:** this is a local, AI-assisted portfolio MVP. Google Ads, Meta Ads, GA4 and CRM data are **deterministic simulations**. No production vendor API was called, no real customer data is present, and no cloud deployment is claimed.
 
 The project demonstrates Python ETL, SQL, PostgreSQL/Supabase compatibility, extensible API connectors, a signed webhook receiver, incremental/idempotent updates, marketing/CRM KPI reconciliation, anomaly and pipeline monitoring, an optional Claude log reviewer with a safe local fallback, a Streamlit engineering demo, and a recognised **Power BI-compatible** star-schema output.
 
