@@ -1,0 +1,4 @@
+{"timestamp":"2026-11-10T06:00:01+00:00","level":"INFO","logger":"marketing_pipeline","message":"extract_complete","run_id":"example-run","source":"crm","rows":12,"stage":"extract"}
+{"timestamp":"2026-11-10T06:00:01+00:00","level":"ERROR","logger":"marketing_pipeline","message":"validation_rejected_rows: row 0: missing campaign_id","run_id":"example-run","source":"crm","rows":1,"stage":"validate","error_type":"DataValidationError"}
+{"timestamp":"2026-11-10T06:00:02+00:00","level":"INFO","logger":"marketing_pipeline","message":"pipeline_complete","run_id":"example-run","rows":11,"stage":"load"}
+

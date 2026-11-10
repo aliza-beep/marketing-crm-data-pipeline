@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scalingcraft-marketing-pipeline"
+version = "0.1.0"
+description = "Portfolio marketing/CRM ETL pipeline with simulated connectors"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "anthropic>=0.40,<1",
+  "fastapi>=0.115,<1",
+  "pandas>=2.2,<3",
+  "plotly>=5.24,<7",
+  "psycopg[binary]>=3.2,<4",
+  "python-dotenv>=1.0,<2",
+  "streamlit>=1.40,<2",
+  "uvicorn>=0.32,<1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<9", "pytest-cov>=6,<8", "httpx>=0.27,<1", "ruff>=0.8,<1"]
+
+[project.scripts]
+marketing-etl = "marketing_pipeline.pipeline:main"
+marketing-export = "marketing_pipeline.export:main"
+marketing-diagnose = "marketing_pipeline.ai.diagnostics:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+

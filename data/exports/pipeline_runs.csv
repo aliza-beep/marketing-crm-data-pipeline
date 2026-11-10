@@ -1,0 +1,3 @@
+﻿run_id,started_at,completed_at,status,rows_extracted,rows_loaded,error_message
+affc5db4-4939-4ef6-95d3-7be7af7cc956,2026-11-10T14:26:19.292256+00:00,2026-11-10T14:26:19.423570+00:00,success,933,933,
+a7ba9759-5ce4-4043-b5ff-3ba491da2e9a,2026-11-10T13:59:46.849794+00:00,2026-11-10T13:59:46.976235+00:00,success,933,933,

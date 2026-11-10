@@ -1,0 +1,169 @@
+Metadata-Version: 2.4
+Name: scalingcraft-marketing-pipeline
+Version: 0.1.0
+Summary: Portfolio marketing/CRM ETL pipeline with simulated connectors
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: anthropic<1,>=0.40
+Requires-Dist: fastapi<1,>=0.115
+Requires-Dist: pandas<3,>=2.2
+Requires-Dist: plotly<7,>=5.24
+Requires-Dist: psycopg[binary]<4,>=3.2
+Requires-Dist: python-dotenv<2,>=1.0
+Requires-Dist: streamlit<2,>=1.40
+Requires-Dist: uvicorn<1,>=0.32
+Provides-Extra: dev
+Requires-Dist: pytest<9,>=8.3; extra == "dev"
+Requires-Dist: pytest-cov<8,>=6; extra == "dev"
+Requires-Dist: httpx<1,>=0.27; extra == "dev"
+Requires-Dist: ruff<1,>=0.8; extra == "dev"
+Dynamic: license-file
+
+# Marketing + CRM Data Pipeline Portfolio
+
+> **Honest scope:** this is a local, AI-assisted portfolio MVP built for a ScalingCraft Solutions Data Engineer application. Google Ads, Meta Ads, GA4 and CRM data are **deterministic simulations**. No production vendor API was called, no real customer data is present, and no cloud deployment is claimed.
+
+The project demonstrates Python ETL, SQL, PostgreSQL/Supabase compatibility, extensible API connectors, a signed webhook receiver, incremental/idempotent updates, marketing/CRM KPI reconciliation, anomaly and pipeline monitoring, an optional Claude log reviewer with a safe local fallback, a Streamlit engineering demo, and a recognised **Power BI-compatible** star-schema output.
+
+## What the reviewer can see
+
+- Deterministic simulated connectors behind a shared interface
+- Validated, idempotent loads into free local SQLite or Supabase/PostgreSQL
+- CPL, CPA, ROAS and lead-quality definitions tied to CRM outcomes
+- Structured JSON logs, run metadata, anomaly records and deliberate-failure practice
+- HMAC-signed webhook ingestion boundary
+- Deterministic log diagnostics; optional Claude enhancement via environment variable
+- Streamlit coding/monitoring demo plus Power BI CSV model, DAX and reconciliation page
+- Automated tests and a daily GitHub Actions workflow
+- Security/runbook/architecture/interview documentation
+
+## Architecture
+
+```mermaid
+flowchart LR
+  S[Simulated Ads / GA4 / CRM] --> E[Python ETL]
+  W[Signed webhook] --> E
+  E --> V[Validate + normalize]
+  V --> DB[(SQLite or Supabase PostgreSQL)]
+  DB --> SQL[SQL KPI + reconciliation]
+  SQL --> ST[Streamlit engineering demo]
+  SQL --> BI[Power BI star-schema CSVs]
+  DB --> MON[Monitoring + anomalies]
+  MON --> AG[Diagnostic fallback / optional Claude]
+```
+
+Full diagram and decisions: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+## Quick start (free local mode)
+
+Prerequisites: Python 3.11–3.13 recommended and Git.
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+Copy-Item .env.example .env
+python -m marketing_pipeline.pipeline --days 30
+python -m marketing_pipeline.export
+pytest
+streamlit run src/marketing_pipeline/dashboard/app.py
+```
+
+Open the shown Streamlit URL. Every dashboard record is labeled as simulated. To start the webhook receiver:
+
+```powershell
+uvicorn marketing_pipeline.webhook:app --reload
+python scripts/send_sample_webhook.py
+```
+
+## Recognised BI output: Power BI
+
+`python -m marketing_pipeline.export` creates:
+
+- `fact_marketing_performance.csv` — the reporting grain and all KPI inputs
+- `dim_campaign.csv`, `dim_date.csv` — dimensions
+- `pipeline_runs.csv`, `anomalies.csv` — operational monitoring
+- `reconciliation.csv` — source-vs-dashboard control totals
+
+Import them using [`docs/POWER_BI_GUIDE.md`](docs/POWER_BI_GUIDE.md), which specifies relationships, DAX measures and four report pages. A `.pbix` is not included because Power BI Desktop is not available in this build environment; the reproducible compatible dataset is included/generated instead.
+
+![Verified Streamlit engineering dashboard using simulated data](docs/screenshots/dashboard.png)
+
+## KPI definitions
+
+| KPI | Definition | Important caveat |
+|---|---|---|
+| CPL | ad spend / CRM leads | depends on attribution completeness |
+| CPA | ad spend / won CRM customers | “acquisition” is explicitly `status = won` |
+| ROAS | attributed CRM revenue / ad spend | not profit; attribution choice matters |
+| Lead quality | CRM leads scoring 60+ / all CRM leads | threshold is a demo business rule |
+
+Attribution in this MVP joins on the same event date, source and campaign. A production model needs agreed attribution windows, timezone, identity resolution, currency handling and late-arriving data policy.
+
+## Supabase/PostgreSQL (optional)
+
+1. Create a free Supabase project yourself; do not share the password in chat or commit it.
+2. Copy the SSL-enabled transaction-pooler URI into local `.env` as `DATABASE_URL`.
+3. Run the same pipeline command; it applies `sql/schema_postgres.sql`.
+4. Before using Supabase's Data API, enable RLS and add least-privilege policies. The service-role key must never reach browser code.
+
+Cloud project creation and hosting require the user's account authorization. This repository does not create those resources automatically or claim that they exist.
+
+## Diagnostic agent
+
+```powershell
+# Always-free deterministic analysis
+python -m marketing_pipeline.ai.diagnostics --no-ai
+
+# Optional Claude enhancement (only after setting ANTHROPIC_API_KEY locally)
+python -m marketing_pipeline.ai.diagnostics
+```
+
+If the key is absent, the API fails, or the response is invalid, the diagnostic remains useful and records its fallback mode. Do not send unsanitized production logs containing PII or secrets to any model.
+
+## Deliberate failure and recovery
+
+```powershell
+python -m marketing_pipeline.pipeline --days 3 --inject-failure crm
+python -m marketing_pipeline.ai.diagnostics --no-ai
+```
+
+One invalid row is rejected and evidenced while valid rows still load. Follow [`docs/FAILURE_RUNBOOK.md`](docs/FAILURE_RUNBOOK.md).
+
+## Repository map
+
+```text
+src/marketing_pipeline/  connectors, ETL, validation, database, monitoring, AI, dashboard
+sql/                     PostgreSQL DDL and interview-ready analytics SQL
+tests/                   unit and integration tests
+docs/                    architecture, BI, security, runbook, learning guide
+data/exports/            generated Power BI-compatible dataset (ignored except marker)
+logs/                    generated structured logs (ignored except marker)
+.github/workflows/       scheduled/test automation
+```
+
+## From simulation to real connectors
+
+The next step is authorized credentials plus vendor SDK/API work: OAuth/token refresh, pagination, timeouts, rate limits, retries, watermarks, raw-response audit storage and contract tests. See [`docs/REAL_CONNECTOR_PLAN.md`](docs/REAL_CONNECTOR_PLAN.md). The current project demonstrates the design boundary, not production API experience.
+
+## Verification and reviewer commands
+
+```powershell
+pytest --cov=marketing_pipeline --cov-report=term-missing
+python -m marketing_pipeline.pipeline --start 2026-10-01 --end 2026-10-31
+python -m marketing_pipeline.export
+python -m marketing_pipeline.ai.diagnostics --no-ai
+```
+
+## Security, limitations and learning
+
+- Credential guidance: [`docs/SECURITY.md`](docs/SECURITY.md)
+- Multi-day interview practice: [`docs/LEARNING_GUIDE.md`](docs/LEARNING_GUIDE.md)
+- This MVP has no production SLA, secret manager, vendor sandbox integration, orchestration platform, full data lineage, multi-touch attribution, or deployed public URL.
+- For GitHub publication, create/choose a repository and authenticate locally (or authorize the GitHub connection); pushing is intentionally not performed without that destination and authorization.
+
+## Two-focused-day scope
+
+Day 1: connector contract, simulations, schemas, validated/idempotent ETL, KPI SQL and tests. Day 2: webhook, monitoring/anomalies, diagnostics, Streamlit, Power BI export, automation and documentation. Mastery is intentionally separated into the seven-day practice plan.
+

@@ -1,0 +1,15 @@
+﻿id,run_id,event_date,source,metric,observed_value,baseline_value,severity,description
+4,a7ba9759-5ce4-4043-b5ff-3ba491da2e9a,2026-11-09,google_ads,spend,1714.88,700.9,medium,spend z-score 2.45 exceeds 2.0
+11,affc5db4-4939-4ef6-95d3-7be7af7cc956,2026-11-09,google_ads,spend,1714.88,700.9,medium,spend z-score 2.45 exceeds 2.0
+3,a7ba9759-5ce4-4043-b5ff-3ba491da2e9a,2026-11-08,google_ads,spend,1739.9,700.9,medium,spend z-score 2.51 exceeds 2.0
+10,affc5db4-4939-4ef6-95d3-7be7af7cc956,2026-11-08,google_ads,spend,1739.9,700.9,medium,spend z-score 2.51 exceeds 2.0
+7,a7ba9759-5ce4-4043-b5ff-3ba491da2e9a,2026-10-31,meta_ads,spend,2418.85,699.08,high,spend z-score 3.51 exceeds 2.0
+14,affc5db4-4939-4ef6-95d3-7be7af7cc956,2026-10-31,meta_ads,spend,2418.85,699.08,high,spend z-score 3.51 exceeds 2.0
+6,a7ba9759-5ce4-4043-b5ff-3ba491da2e9a,2026-10-27,meta_ads,spend,2448.15,699.08,high,spend z-score 3.57 exceeds 2.0
+13,affc5db4-4939-4ef6-95d3-7be7af7cc956,2026-10-27,meta_ads,spend,2448.15,699.08,high,spend z-score 3.57 exceeds 2.0
+5,a7ba9759-5ce4-4043-b5ff-3ba491da2e9a,2026-10-22,meta_ads,spend,1730.95,699.08,medium,spend z-score 2.11 exceeds 2.0
+12,affc5db4-4939-4ef6-95d3-7be7af7cc956,2026-10-22,meta_ads,spend,1730.95,699.08,medium,spend z-score 2.11 exceeds 2.0
+2,a7ba9759-5ce4-4043-b5ff-3ba491da2e9a,2026-10-20,google_ads,spend,1963.93,700.9,high,spend z-score 3.05 exceeds 2.0
+9,affc5db4-4939-4ef6-95d3-7be7af7cc956,2026-10-20,google_ads,spend,1963.93,700.9,high,spend z-score 3.05 exceeds 2.0
+1,a7ba9759-5ce4-4043-b5ff-3ba491da2e9a,2026-10-13,google_ads,spend,1565.15,700.9,medium,spend z-score 2.09 exceeds 2.0
+8,affc5db4-4939-4ef6-95d3-7be7af7cc956,2026-10-13,google_ads,spend,1565.15,700.9,medium,spend z-score 2.09 exceeds 2.0

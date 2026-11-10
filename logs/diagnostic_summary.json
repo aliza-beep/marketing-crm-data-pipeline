@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-11-10T14:00:13.005361+00:00",
+  "mode": "deterministic_fallback",
+  "status": "healthy",
+  "event_counts": {
+    "INFO": 5
+  },
+  "sources_seen": [
+    "crm",
+    "ga4",
+    "google_ads",
+    "meta_ads"
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "no_errors",
+      "evidence": "No error events detected.",
+      "recommended_action": "Continue scheduled monitoring."
+    }
+  ]
+}

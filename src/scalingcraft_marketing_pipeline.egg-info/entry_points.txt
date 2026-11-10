@@ -1,0 +1,4 @@
+[console_scripts]
+marketing-diagnose = marketing_pipeline.ai.diagnostics:main
+marketing-etl = marketing_pipeline.pipeline:main
+marketing-export = marketing_pipeline.export:main
